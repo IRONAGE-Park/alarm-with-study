@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="135" height="135" viewBox="0 0 135 135">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="16" height="16" transform="translate(1714 -1107)" fill="#fff" stroke="#707070" stroke-width="1" />
+    </clipPath>
+  </defs>
+  <g transform="translate(-1247 1125)">
+    <g transform="translate(1247 -1125)" stroke-width="8">
+      <rect width="80" height="80" rx="14" stroke="none" />
+      <rect x="4" y="4" width="72" height="72" rx="10" />
+    </g>
+    <g transform="translate(-321.5 -180)">
+      <line y2="26" transform="translate(1663.5 -863)" stroke-linecap="round" stroke-width="8" />
+      <line x1="13" y2="12.5" transform="translate(1663.5 -849.5)" stroke-linecap="round" stroke-width="8" />
+      <line x2="13" y2="12.5" transform="translate(1650.5 -849.5)" stroke-linecap="round" stroke-width="8" />
+    </g>
+    <line x2="23" transform="translate(1330.5 -1066)" stroke-width="8" />
+    <line x2="23" transform="translate(1330.5 -994)" stroke-width="8" />
+    <line y2="23" transform="translate(1378 -1041.5)" stroke-width="8" />
+    <line y2="23" transform="translate(1306 -1041.5)" stroke-width="8" />
+    <g transform="translate(-348 37)" clip-path="url(#clip-path)">
+      <g transform="translate(1650 -1107)" fill="none" stroke-width="8">
+        <rect width="80" height="80" rx="14" stroke="none" />
+        <rect x="4" y="4" width="72" height="72" rx="10" fill="none" />
+      </g>
+    </g>
+    <g transform="translate(275 -2720) rotate(90)" clip-path="url(#clip-path)">
+      <g transform="translate(1650 -1107)" fill="none" stroke-width="8">
+        <rect width="80" height="80" rx="14" stroke="none" />
+        <rect x="4" y="4" width="72" height="72" rx="10" fill="none" />
+      </g>
+    </g>
+    <g transform="translate(3032 -2097) rotate(180)" clip-path="url(#clip-path)">
+      <g transform="translate(1650 -1107)" fill="none" stroke-width="8">
+        <rect width="80" height="80" rx="14" stroke="none" />
+        <rect x="4" y="4" width="72" height="72" rx="10" fill="none" />
+      </g>
+    </g>
+  </g>
+</svg>
