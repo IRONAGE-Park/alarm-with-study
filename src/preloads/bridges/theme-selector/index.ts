@@ -36,5 +36,5 @@ export interface ThemeSelectorApi {
      * @param theme 변경된 `App Theme`
      */
     receiveTheme: (theme: "system" | "dark" | "light") => void
-  ) => Promise<void>;
+  ) => void;
 }
