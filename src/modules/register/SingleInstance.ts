@@ -1,7 +1,7 @@
 import { app } from "electron";
 // Electron Main-process module
 
-import MainWindow from "@windows/MainWindow";
+import SettingWindow from "@windows/SettingWindow";
 // Main-process windows
 
 import Register from "@main/register/_Register";
@@ -26,7 +26,7 @@ class SingleInstance extends Register {
     } else {
       // 두 번째 `App` 실행 시 이벤트 발생
       app.on("second-instance", () => {
-        MainWindow.getInstance().resetWindow();
+        SettingWindow.getInstance().resetWindow();
       });
     }
   }

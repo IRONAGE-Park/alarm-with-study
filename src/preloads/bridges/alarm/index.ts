@@ -1,9 +1,7 @@
-import type {
-  AlarmMachine,
-  CreateAlarmMachine,
-  NextAction,
-} from "@main/register/AlarmManager";
-// types
+import type CreateAlarmMachineDto from "@main/alarms/AlarmMachine/interfaces/create-alarm-machine-dto";
+import type RendererAlarmMachine from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
+import { NextAction } from "@main/alarms/AlarmMachine/AlarmMachine";
+// interfaces
 
 /** `Alarm` message 선택자 */
 export const ALARM = "alarm" as const;
@@ -20,14 +18,14 @@ export const ACTION_THICK = `${ALARM}:thick` as const;
 
 export interface AlarmApi {
   create(
-    alarmMachine: CreateAlarmMachine,
+    alarmMachine: CreateAlarmMachineDto,
     isImmediately: boolean
-  ): Promise<AlarmMachine>;
+  ): Promise<RendererAlarmMachine>;
   start(id: string): Promise<void>;
   stop(id: string): Promise<void>;
   delete(id: string): Promise<void>;
-  get alarms(): Promise<AlarmMachine[]>;
-  checkRing(id: string, nextAction: NextAction): Promise<void>;
+  get alarms(): Promise<RendererAlarmMachine[]>;
+  checkRing(id: string, nextAction: NextAction): Promise<string>;
   registerRingDetector(receiveRing: (id: string) => void): void;
   registerThickDetector(
     receiveThick: (id: string, spareTime: number) => void

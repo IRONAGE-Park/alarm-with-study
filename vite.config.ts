@@ -39,7 +39,10 @@ export default defineConfig({
   assetsInclude,
   build: {
     rollupOptions: {
-      input: path.join(rendererSrc, "index.html"),
+      input: {
+        setting: path.join(rendererSrc, "setting", "index.html"),
+        alarm: path.join(rendererSrc, "alarm", "index.html"),
+      },
     },
     outDir: buildSrc,
   },

@@ -3,7 +3,7 @@
 const electronBuilder = require("electron-builder");
 require("dotenv").config();
 
-const { productName, appId } = require("../package.json");
+const { name, productName, appId } = require("../package.json");
 
 process.env.NODE_ENV = "production";
 
@@ -24,6 +24,11 @@ electronBuilder.build({
     asar: !isNoAsar,
     compression: "maximum",
     copyright: "Copyright © 2022 IRONAGE-Park",
+    publish: {
+      provider: "github",
+      owner: "IRONAGE-Park",
+      repo: name,
+    },
     // Files & Directories
     files: ["node_modules/", "build/", "package/", "package.json"],
     directories: {
@@ -66,7 +71,7 @@ electronBuilder.build({
     mac: {
       artifactName: `${PACKAGE_NAME}-\${version}.\${ext}`,
       category: "public.app-category.utilities",
-      target: "pkg",
+      target: "dmg",
       type: "distribution",
       entitlements: "./package/mac/entitlements.mac.plist",
       entitlementsInherit: "./package/mac/entitlements.mac.plist",
@@ -79,7 +84,7 @@ electronBuilder.build({
             provisioningProfile: process.env.PROVISIONING_PROFILE,
           }),
     },
-    pkg: {
+    dmg: {
       license: __PATH_LICENSE,
       scripts: "./package/mac",
       welcome: "./package/mac/welcome.html",

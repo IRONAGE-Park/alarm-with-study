@@ -1,9 +1,6 @@
-import type {
-  AlarmMachine,
-  CreateAlarmMachine,
-  NextAction,
-} from "@main/register/AlarmManager";
-// types
+import type CreateAlarmMachineDto from "@main/alarms/AlarmMachine/interfaces/create-alarm-machine-dto";
+import type RendererAlarmMachine from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
+// interfaces
 
 import { contextBridge, ipcRenderer } from "electron";
 // Electron Renderer-process module
@@ -24,9 +21,9 @@ import {
 
 const alarmApi: AlarmApi = {
   create(
-    alarmMachine: CreateAlarmMachine,
+    alarmMachine: CreateAlarmMachineDto,
     isImmediately: boolean
-  ): Promise<AlarmMachine> {
+  ): Promise<RendererAlarmMachine> {
     return ipcRenderer.invoke(ACTION_CREATE_ALARM, alarmMachine, isImmediately);
   },
   start(id: string): Promise<void> {
@@ -38,11 +35,11 @@ const alarmApi: AlarmApi = {
   delete(id: string): Promise<void> {
     return ipcRenderer.invoke(ACTION_DELETE_ALARM, id);
   },
-  get alarms(): Promise<AlarmMachine[]> {
+  get alarms(): Promise<RendererAlarmMachine[]> {
     return ipcRenderer.invoke(ACTION_GET_ALARMS);
   },
-  checkRing(id: string): Promise<void> {
-    return ipcRenderer.invoke(ACTION_CHECK_RING, id);
+  checkRing(id: string, nextAction): Promise<string> {
+    return ipcRenderer.invoke(ACTION_CHECK_RING, id, nextAction);
   },
   registerRingDetector(receiveRing: (id: string) => void): void {
     ipcRenderer.on(ACTION_RING, (_, id: string) => {

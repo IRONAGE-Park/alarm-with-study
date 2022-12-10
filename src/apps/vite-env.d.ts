@@ -4,6 +4,7 @@ import type {
   THEME_SELECTOR,
   ThemeSelectorApi,
 } from "@preloads/bridges/theme-selector";
+import { ALARM, AlarmApi } from "@bridges/alarm";
 
 declare global {
   /** `Renderer-process`에서 전역적으로 사용하는 window 객체 */
@@ -12,6 +13,7 @@ declare global {
     [MAIN_WINDOW]: MainWindowApi;
     /** `App Theme` 선택 API */
     [THEME_SELECTOR]: ThemeSelectorApi;
+    [ALARM]: AlarmApi;
   }
 }
 
