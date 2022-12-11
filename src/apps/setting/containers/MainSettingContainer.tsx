@@ -52,7 +52,11 @@ const MainSettingContainer = () => {
         <CreateAlarmBox onClick={onClick} />
       </StyleTopArea>
       <StyleBottomArea>
-        <ViewAlarmMachineList alarmMachines={alarmMachines} />
+        {alarmMachines.length === 0 ? (
+          <StyleEmptyMessage>등록된 알람이 없습니다.</StyleEmptyMessage>
+        ) : (
+          <ViewAlarmMachineList alarmMachines={alarmMachines} />
+        )}
       </StyleBottomArea>
     </StyleContainer>
   );
@@ -84,7 +88,7 @@ const StyleBottomArea = styled.section`
   width: calc(100% - 40px);
   height: 200px;
 
-  padding: 50px;
+  padding: 24px;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   ${({ theme }) => theme.style.boxShadow.dropdownEmphasis};
@@ -92,4 +96,16 @@ const StyleBottomArea = styled.section`
   background: ${({ theme }) => theme.color.grayScale.gray200};
 
   overflow-y: auto;
+`;
+
+const StyleEmptyMessage = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  font-size: 24px;
+  font-weight: 500;
 `;

@@ -37,7 +37,9 @@ const CreateCommanderBox = ({
         분
       </StyleInputArea>
       <StyleInputArea>
-        공부 <Toggle checked={isRest} onChange={onChangeType} /> 휴식
+        <StyleTypeText>공부</StyleTypeText>
+        <Toggle checked={isRest} onChange={onChangeType} />
+        <StyleTypeText>휴식</StyleTypeText>
       </StyleInputArea>
     </StyleBox>
   );
@@ -50,19 +52,22 @@ const StyleBox = styled.div`
 
   padding: 10px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.color.grayScale.coolGray200};
+  background: ${({ theme }) => theme.color.primary.blue200};
 
   &:not(:first-of-type) {
     margin-top: 20px;
   }
 `;
 
-const StyleNumbering = styled.p``;
+const StyleNumbering = styled.p`
+  font-size: 14px;
+`;
 
 const StyleInputArea = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
   width: 100%;
   height: 40px;
 
@@ -73,10 +78,15 @@ const StyleDurationInput = styled.input`
   width: 200px;
   height: 100%;
 
-  margin: 0 10px;
-  padding: 0 10px;
+  margin: 0 4px;
+  padding: 0 4px;
 
   text-align: right;
 
   border-radius: 10px;
+`;
+
+const StyleTypeText = styled.span`
+  font-size: 12px;
+  margin: 0 6px;
 `;

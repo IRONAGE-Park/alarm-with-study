@@ -6,6 +6,7 @@ import { ButtonBase } from "@mui/material";
 import Checkbox from "@renderer/common/components/Checkbox";
 import CreateCommanderBox from "@renderer/setting/components/inputs/CreateCommanderBox";
 import { AlarmCommanderType } from "@main/alarms/AlarmCommander/AlarmCommander";
+import ScrollWrapper from "@renderer/common/components/ScrollWrapper";
 
 interface CreateAlarmBoxProps {
   onClick: (
@@ -77,17 +78,19 @@ const CreateAlarmBox = ({ onClick }: CreateAlarmBoxProps) => {
   return (
     <StyleBox>
       <StyleListArea>
-        {alarmMachine.commanders.map((commander, index) => (
-          <CreateCommanderBox
-            key={index}
-            index={index + 1}
-            alarmCommander={commander}
-            onChangeDuration={duration =>
-              onChangeCommanderDuration(duration, index)
-            }
-            onChangeType={type => onChangeCommanderType(type, index)}
-          />
-        ))}
+        <ScrollWrapper>
+          {alarmMachine.commanders.map((commander, index) => (
+            <CreateCommanderBox
+              key={index}
+              index={index + 1}
+              alarmCommander={commander}
+              onChangeDuration={duration =>
+                onChangeCommanderDuration(duration, index)
+              }
+              onChangeType={type => onChangeCommanderType(type, index)}
+            />
+          ))}
+        </ScrollWrapper>
       </StyleListArea>
       <StyleAddButton onClick={onClickAddCommander}>
         커맨드 추가하기
@@ -128,7 +131,7 @@ const StyleBox = styled.div`
 
 const StyleListArea = styled.div`
   width: 100%;
-  height: 300px;
+  height: 290px;
 
   overflow: auto;
 `;
