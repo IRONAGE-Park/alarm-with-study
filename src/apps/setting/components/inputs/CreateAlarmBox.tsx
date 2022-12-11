@@ -21,9 +21,9 @@ const CreateAlarmBox = ({ onClick }: CreateAlarmBoxProps) => {
     commanders: [
       {
         type: "study",
-        duration: 60,
+        duration: 25,
       },
-      { type: "rest", duration: 60 },
+      { type: "rest", duration: 5 },
     ],
   });
   const [isImmediately, setIsImmediately] = useState(false);

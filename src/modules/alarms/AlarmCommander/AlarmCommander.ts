@@ -8,7 +8,7 @@ abstract class AlarmCommander {
   spareTime: number = 0;
 
   initializeSpareTime(): void {
-    this.spareTime = this.duration;
+    this.spareTime = this.duration * 60;
   }
 
   thick(): void {

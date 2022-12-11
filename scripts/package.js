@@ -84,7 +84,7 @@ electronBuilder.build({
             provisioningProfile: process.env.PROVISIONING_PROFILE,
           }),
     },
-    dmg: {
+    pkg: {
       license: __PATH_LICENSE,
       scripts: "./package/mac",
       welcome: "./package/mac/welcome.html",
