@@ -9,25 +9,27 @@ import AppIcon from "@assets/icons/app.icns";
 // assets
 
 import { PRELOAD_PATH } from "@constants/constants";
+import { AlarmCommanderType } from "@main/alarms/AlarmCommander/AlarmCommander";
 // constants
 
 /** window URL */
 const LOAD_URL = "alarm" as const;
+
 // 상수 정의
 
 class AlarmWindow {
   window: BrowserWindow;
 
   /** '`Main Window` 생성자' */
-  constructor(private id: string) {
+  constructor(private id: string, private type: AlarmCommanderType) {
     this.window = new BrowserWindow({
       title: "Alarm With Study - Alarm!!",
       icon: AppIcon,
-      width: 1080,
-      height: 720,
       roundedCorners: true,
       show: false,
       closable: true,
+      frame: false,
+      fullscreen: true,
       webPreferences: {
         devTools: isDev, // [DEVELOPMENT MODE]
         zoomFactor: 1.0,
@@ -38,13 +40,19 @@ class AlarmWindow {
   }
 
   public initializeWindow(): void {
-    console.log(this.id);
     if (isDev) {
       // [DEVELOPMENT MODE]
-      this.window.loadURL(`http://localhost:5173/${LOAD_URL}/#/${this.id}`);
+      this.window.loadURL(
+        `http://localhost:5173/${LOAD_URL}/#/${this.id}/${this.type}`
+      );
     } else {
       // [PRODUCTION MODE]
-      this.window.loadFile(path.resolve(__dirname, `./${LOAD_URL}/index.html`));
+      this.window.loadFile(
+        path.resolve(__dirname, `./${LOAD_URL}/index.html`),
+        {
+          hash: `/${this.id}/${this.type}`,
+        }
+      );
     }
 
     // Open the DevTools.

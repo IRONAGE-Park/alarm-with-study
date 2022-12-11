@@ -6,8 +6,11 @@ import { usingRegister } from "@main/register/_Register";
 import AutoUpdate from "@main/register/AutoUpdate";
 import SingleInstance from "@main/register/SingleInstance";
 import ThemeSelector from "@main/register/ThemeSelector";
+import TrayRegister from "@main/register/TrayRegister";
 // Main-process Register module
 
+import MenuBuilder from "@main/builder/MenuBuilder";
+import TrayBuilder from "@main/builder/TrayBuilder";
 import AlarmManager from "@main/manager/AlarmManager";
 // Main-process module
 
@@ -46,6 +49,14 @@ class Application {
     }
   }
 
+  private loadMenuRegister() {
+    /** 메뉴 빌더 instance */
+    const menuBuilder = new MenuBuilder();
+    /** 시스템 Tray 빌더 instance */
+    const trayBuilder = new TrayBuilder();
+    return new TrayRegister(menuBuilder, trayBuilder);
+  }
+
   private onActivate() {
     SettingWindow.getInstance().resetWindow();
   }
@@ -56,6 +67,8 @@ class Application {
     this.registerLogManager(app.isPackaged);
     this.registerProcessHandle();
     this.initModules();
+
+    const trayRegister = this.loadMenuRegister();
 
     const alarmManager = new AlarmManager();
     alarmManager.registerHandler();
@@ -68,6 +81,7 @@ class Application {
           new AutoUpdate(),
           new SingleInstance(),
           new ThemeSelector(),
+          trayRegister,
         ]); // 모듈 등록 후 메모리에 저장
       })
       .on("activate", () => {

@@ -4,7 +4,7 @@ import type { AlarmMachineType } from "@main/alarms/AlarmMachine/AlarmMachine";
 
 interface CreateAlarmMachineDto {
   type: AlarmMachineType;
-  macro: CreateAlarmCommanderDto[];
+  commanders: CreateAlarmCommanderDto[];
 }
 
 export default CreateAlarmMachineDto;

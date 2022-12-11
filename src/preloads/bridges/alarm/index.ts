@@ -28,6 +28,10 @@ export interface AlarmApi {
   checkRing(id: string, nextAction: NextAction): Promise<string>;
   registerRingDetector(receiveRing: (id: string) => void): void;
   registerThickDetector(
-    receiveThick: (id: string, spareTime: number) => void
+    receiveThick: (
+      machineId: string,
+      commanderId: string,
+      spareTime: number
+    ) => void
   ): void;
 }

@@ -1,3 +1,4 @@
+import uuid from "uuid";
 import AlarmCommander, {
   AlarmCommanderType,
 } from "@main/alarms/AlarmCommander/AlarmCommander";
@@ -8,12 +9,13 @@ export function createAlarmCommander(
   type: AlarmCommanderType,
   duration: number
 ): AlarmCommander {
+  const id = uuid.v4();
   switch (type) {
     case "rest":
-      return new RestAlarmCommander(duration);
+      return new RestAlarmCommander(id, duration);
     case "study":
     default:
-      return new StudyAlarmCommander(duration);
+      return new StudyAlarmCommander(id, duration);
   }
 }
 

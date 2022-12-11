@@ -6,6 +6,7 @@ import AlarmCommander, {
 import { convertAlarmCommanderToType } from "@main/alarms/AlarmCommander/utils";
 
 interface RendererAlarmCommander {
+  id: string;
   type: AlarmCommanderType;
   duration: number;
   spareTime: number;
@@ -17,6 +18,7 @@ export function convertAlarmCommanderToRenderer(
   alarmCommander: AlarmCommander
 ): RendererAlarmCommander {
   return {
+    id: alarmCommander.id,
     type: convertAlarmCommanderToType(alarmCommander),
     duration: alarmCommander.duration,
     spareTime: alarmCommander.spareTime,

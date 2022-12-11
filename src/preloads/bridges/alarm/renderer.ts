@@ -46,10 +46,19 @@ const alarmApi: AlarmApi = {
       receiveRing(id);
     });
   },
-  registerThickDetector(receiveThick: (id: string, spareTime: number) => void) {
-    ipcRenderer.on(ACTION_THICK, (_, id: string, spareTime: number) => {
-      receiveThick(id, spareTime);
-    });
+  registerThickDetector(
+    receiveThick: (
+      machineId: string,
+      commanderId: string,
+      spareTime: number
+    ) => void
+  ) {
+    ipcRenderer.on(
+      ACTION_THICK,
+      (_, machineId: string, commanderId: string, spareTime: number) => {
+        receiveThick(machineId, commanderId, spareTime);
+      }
+    );
   },
 };
 contextBridge.exposeInMainWorld(ALARM, alarmApi);

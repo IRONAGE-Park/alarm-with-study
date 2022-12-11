@@ -29,7 +29,7 @@ export function convertAlarmMachineToRenderer(
     type: alarmMachine.type,
     commanders: alarmMachine.commanders.map(convertAlarmCommanderToRenderer),
     state: {
-      index: alarmMachine.state.index,
+      id: alarmMachine.state.id,
       timer: !!alarmMachine.state.timer,
     },
   };

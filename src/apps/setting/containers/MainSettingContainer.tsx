@@ -1,40 +1,95 @@
 import { useEffect, useState } from "react";
 import RendererAlarmMachine from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
+import styled from "@emotion/styled";
+import CreateAlarmBox from "@renderer/setting/components/inputs/CreateAlarmBox";
+import CreateAlarmMachineDto from "@main/alarms/AlarmMachine/interfaces/create-alarm-machine-dto";
+import { ViewAlarmMachineList } from "@renderer/setting/components/ViewAlarmMachineItem";
 
 const MainSettingContainer = () => {
-  const [alarmMachineList, setAlarmMachineList] = useState<
-    RendererAlarmMachine[]
-  >([]);
+  const [alarmMachines, setAlarmMachines] = useState<RendererAlarmMachine[]>(
+    []
+  );
 
-  const onClick = async () => {
+  const onClick = async (
+    createAlarmMachineDto: CreateAlarmMachineDto,
+    isImmediately: boolean
+  ) => {
     const alarm = await window.alarm.create(
-      {
-        type: "infinite",
-        macro: [
-          {
-            type: "study",
-            duration: 1,
-          },
-          {
-            type: "rest",
-            duration: 60,
-          },
-        ],
-      },
-      true
+      createAlarmMachineDto,
+      isImmediately
     );
-    setAlarmMachineList(prev => prev.concat(alarm));
+    setAlarmMachines(prev => prev.concat(alarm));
   };
 
   useEffect(() => {
     window.alarm.alarms.then(alarms => {
-      setAlarmMachineList(() => alarms);
+      setAlarmMachines(() => alarms);
+    });
+    window.alarm.registerThickDetector((machineId, commanderId, spareTime) => {
+      setAlarmMachines(prev =>
+        prev.map(alarmMachine =>
+          alarmMachine.id === machineId
+            ? {
+                ...alarmMachine,
+                commanders: alarmMachine.commanders.map(commander =>
+                  commander.id === commanderId
+                    ? {
+                        ...commander,
+                        spareTime: spareTime,
+                      }
+                    : commander
+                ),
+              }
+            : alarmMachine
+        )
+      );
     });
   }, []);
 
-  console.log(alarmMachineList);
-
-  return <p onClick={onClick}>임의 추가하기</p>;
+  return (
+    <StyleContainer>
+      <StyleTopArea>
+        <CreateAlarmBox onClick={onClick} />
+      </StyleTopArea>
+      <StyleBottomArea>
+        <ViewAlarmMachineList alarmMachines={alarmMachines} />
+      </StyleBottomArea>
+    </StyleContainer>
+  );
 };
 
 export default MainSettingContainer;
+
+const StyleContainer = styled.article`
+  width: 100%;
+  height: 100vh;
+  background: ${({ theme }) => theme.color.grayScale.coolGray200};
+
+  padding: 10px;
+`;
+
+const StyleTopArea = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+`;
+
+const StyleBottomArea = styled.section`
+  position: fixed;
+  bottom: 0;
+  left: 20px;
+
+  width: calc(100% - 40px);
+  height: 200px;
+
+  padding: 50px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  ${({ theme }) => theme.style.boxShadow.dropdownEmphasis};
+
+  background: ${({ theme }) => theme.color.grayScale.gray200};
+
+  overflow-y: auto;
+`;

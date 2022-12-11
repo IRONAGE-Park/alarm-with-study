@@ -4,14 +4,20 @@ import { CustomSnackbarProvider } from "@renderer/common/contexts/CustomSnackbar
 // contexts
 
 import GlobalThemeProvider from "@renderer/common/styles/GlobalThemeProvider";
+import { useLocation } from "react-router-dom";
+import Routes from "@renderer/alarm/Routes";
 // styles
 
 const App = () => {
+  const location = useLocation();
+
   return (
     <GlobalThemeProvider>
       <ContextMenuProvider>
         <CustomDialogProvider>
-          <CustomSnackbarProvider>dfdjs</CustomSnackbarProvider>
+          <CustomSnackbarProvider>
+            <Routes location={location} />
+          </CustomSnackbarProvider>
         </CustomDialogProvider>
       </ContextMenuProvider>
     </GlobalThemeProvider>
