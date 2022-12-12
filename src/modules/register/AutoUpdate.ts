@@ -6,9 +6,6 @@ import { autoUpdater } from "electron-updater";
 import Register from "@main/register/_Register";
 // Main-process module
 
-import EnvironmentGetter from "@libs/EnvironmentGetter";
-// common libraries
-
 /**
  * `Main-process`
  *
@@ -20,9 +17,6 @@ import EnvironmentGetter from "@libs/EnvironmentGetter";
  */
 class AutoUpdate extends Register {
   public registerListener(): void {
-    if (EnvironmentGetter.getMainIsMac()) {
-      return;
-    }
     autoUpdater.logger = log;
 
     // autoUpdater.on("checking-for-update", info => {});

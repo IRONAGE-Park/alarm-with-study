@@ -23,8 +23,8 @@
     "test:watch": "jest --watch",
     "build": "rm -rf ./build && vite build",
     "package": "rm -rf ./dist && yarn build && node scripts/package.js",
-    "package:no-sign": "cross-env NO_SIGN=true yarn package",
-    "package:no-asar": "cross-env NO_ASAR=true yarn package:no-sign",
+    "package:no-sign": "yarn package --no-sign",
+    "package:no-asar": "yarn package:no-sign --no-asar",
     "eslint": "eslint \"src/**/*.{ts,tsx}\"",
     "eslint:fix": "eslint --fix \"src/**/*.{ts,tsx}\"",
     "prettier": "prettier --check \"src/**/*.{ts,tsx}\"",
@@ -36,7 +36,6 @@
     "electron-log": "^4.4.8",
     "electron-settings": "^4.0.2",
     "electron-updater": "^5.3.0",
-    "exceljs": "^4.3.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -58,7 +57,6 @@
     "@vitejs/plugin-react": "^2.1.0",
     "babel-jest": "^29.2.2",
     "babel-preset-react-app": "^10.0.1",
-    "cross-env": "^7.0.3",
     "dotenv": "^16.0.2",
     "electron": "^21.1.0",
     "electron-builder": "^23.6.0",

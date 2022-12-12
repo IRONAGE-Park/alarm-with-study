@@ -1,8 +1,8 @@
-# Serial Number Generator
+# Alarm With Study 
 
-This project is **`Serial Number Generator`** for `Grid` Device.
+This project is **`Alarm With Study`** for Students.
 
-🖥 `Serial Number Generator`를 🛠개발하여 ⚙빌드하고, 💾배포 파일까지 만들 수 있는 프로젝트입니다.  
+🖥 `Alarm With Study`를 🛠개발하여 ⚙빌드하고, 💾배포 파일까지 만들 수 있는 프로젝트입니다.  
 `Electron`, `React`, `TypeScript`를 사용한 데스크탑 애플리케이션입니다.  
 `Vite`를 사용하여 번들링합니다.
 
@@ -14,7 +14,6 @@ This project is **`Serial Number Generator`** for `Grid` Device.
   - `npm`: `6.14.x`
   - `yarn`: `1.22.x` 이상
   - `Python`: `3.x.x`
-  - `Visual Studio`
 
 - `macOS`
 

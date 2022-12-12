@@ -12,8 +12,10 @@ const PUBLISHER_NAME = "IRONAGE-Park";
 const __PATH_LICENSE = "./package/LICENSE.txt";
 const __PATH_LICENSE_EUC_KR = "./package/LICENSE-EUC-KR.txt";
 
-const isNoSign = !!process.env.NO_SIGN;
-const isNoAsar = !!process.env.NO_ASAR;
+const findArgv = flag => process.argv.findIndex(argv => argv === flag) !== -1;
+
+const isNoSign = findArgv("--no-sign");
+const isNoAsar = findArgv("--no-asar");
 
 electronBuilder.build({
   x64: true,
@@ -80,16 +82,22 @@ electronBuilder.build({
         ? {}
         : {
             hardenedRuntime: true,
-            gatekeeperAssess: false,
+            gatekeeperAssess: true,
             provisioningProfile: process.env.PROVISIONING_PROFILE,
           }),
     },
-    pkg: {
-      license: __PATH_LICENSE,
-      scripts: "./package/mac",
-      welcome: "./package/mac/welcome.html",
-      conclusion: "./package/mac/conclusion.html",
-      mustClose: [appId],
+    dmg: {
+      contents: [
+        {
+          x: 10,
+          y: 10,
+          type: "file",
+          name: "LICENSE.txt",
+          path: __PATH_LICENSE,
+        },
+      ],
+      backgroundColor: "#06f",
+      sign: true,
     },
   },
 });

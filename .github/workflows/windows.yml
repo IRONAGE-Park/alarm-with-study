@@ -1,5 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-name: INVALG Studio - Windows
+name: Alarm With Study - Windows
 
 # Controls when the workflow will run
 on:
@@ -31,21 +31,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
-      # Python settings
-      - name: Setup Python
-        uses: actions/setup-python@v4.0.0
-        with:
-          python-version: '2.7.18'
-
-      # Visual Studio settings
-      - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v1.1
-
-      # node-gyp Visual Studio Configuration
-      - name: setup node-gyp config
-        run: |
-          npm config set msvs_version 2015 --global
 
       # Runs a single command using the runners shell
       - name: Install Dependencies
