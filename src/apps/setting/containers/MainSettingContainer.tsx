@@ -1,9 +1,19 @@
-import { useEffect, useState } from "react";
-import RendererAlarmMachine from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
-import styled from "@emotion/styled";
+import type CreateAlarmMachineDto from "@main/alarms/AlarmMachine/interfaces/create-alarm-machine-dto";
+import type UpdateAlarmMachineStateDto from "@main/alarms/AlarmMachine/interfaces/update-alarm-machine-state-dto";
+// interfaces
+
+import type RendererAlarmMachine from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
+// types
+
+import { useState, useEffect } from "react";
+// React modules
+
 import CreateAlarmBox from "@renderer/setting/components/inputs/CreateAlarmBox";
-import CreateAlarmMachineDto from "@main/alarms/AlarmMachine/interfaces/create-alarm-machine-dto";
 import { ViewAlarmMachineList } from "@renderer/setting/components/ViewAlarmMachineItem";
+// components
+
+import styled from "@emotion/styled";
+// styles
 
 const MainSettingContainer = () => {
   const [alarmMachines, setAlarmMachines] = useState<RendererAlarmMachine[]>(
@@ -21,29 +31,64 @@ const MainSettingContainer = () => {
     setAlarmMachines(prev => prev.concat(alarm));
   };
 
+  const onChangeState = (
+    id: string,
+    updateAlarmMachineStateDto: UpdateAlarmMachineStateDto
+  ) => {
+    setAlarmMachines(prev =>
+      prev.map(alarmMachine =>
+        alarmMachine.id === id
+          ? {
+              ...alarmMachine,
+              state: {
+                ...alarmMachine.state,
+                ...updateAlarmMachineStateDto,
+              },
+            }
+          : alarmMachine
+      )
+    );
+  };
+
+  const onDelete = (id: string) => {
+    setAlarmMachines(prev =>
+      prev.filter(alarmMachine => alarmMachine.id !== id)
+    );
+  };
+
+  const onChangeSpareTime = (
+    machineId: string,
+    commanderId: string,
+    spareTime: number
+  ) => {
+    setAlarmMachines(prev =>
+      prev.map(alarmMachine =>
+        alarmMachine.id === machineId
+          ? {
+              ...alarmMachine,
+              commanders: alarmMachine.commanders.map(commander =>
+                commander.id === commanderId
+                  ? {
+                      ...commander,
+                      spareTime: spareTime,
+                    }
+                  : commander
+              ),
+            }
+          : alarmMachine
+      )
+    );
+  };
+
   useEffect(() => {
     window.alarm.alarms.then(alarms => {
       setAlarmMachines(() => alarms);
     });
-    window.alarm.registerThickDetector((machineId, commanderId, spareTime) => {
-      setAlarmMachines(prev =>
-        prev.map(alarmMachine =>
-          alarmMachine.id === machineId
-            ? {
-                ...alarmMachine,
-                commanders: alarmMachine.commanders.map(commander =>
-                  commander.id === commanderId
-                    ? {
-                        ...commander,
-                        spareTime: spareTime,
-                      }
-                    : commander
-                ),
-              }
-            : alarmMachine
-        )
-      );
-    });
+    window.alarm.registerThickDetector(onChangeSpareTime);
+    window.alarm.registerRingDetector(id =>
+      onChangeState(id, { timer: false })
+    );
+    window.alarm.registerChangedAlarmMachineStateDetector(onChangeState);
   }, []);
 
   return (
@@ -55,7 +100,11 @@ const MainSettingContainer = () => {
         {alarmMachines.length === 0 ? (
           <StyleEmptyMessage>등록된 알람이 없습니다.</StyleEmptyMessage>
         ) : (
-          <ViewAlarmMachineList alarmMachines={alarmMachines} />
+          <ViewAlarmMachineList
+            alarmMachines={alarmMachines}
+            onChangeState={onChangeState}
+            onDelete={onDelete}
+          />
         )}
       </StyleBottomArea>
     </StyleContainer>

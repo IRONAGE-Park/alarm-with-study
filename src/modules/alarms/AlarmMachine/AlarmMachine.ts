@@ -1,10 +1,15 @@
-import AlarmCommander from "@main/alarms/AlarmCommander/AlarmCommander";
 import AlarmWindow from "@windows/AlarmWindow";
-import alarmWindow from "@windows/AlarmWindow";
+// windows
+
 import RendererSender from "@libs/RendererSender";
-import { ACTION_THICK } from "@bridges/alarm";
+// common libraries
+
+import AlarmCommander from "@main/alarms/AlarmCommander/AlarmCommander";
 import { convertAlarmCommanderToType } from "@main/alarms/AlarmCommander/utils";
 // commanders
+
+import { ACTION_RING, ACTION_THICK } from "@bridges/alarm";
+// messages
 
 export type AlarmMachineType = "once" | "infinite";
 export type NextAction = "start" | "stop";
@@ -33,6 +38,8 @@ class AlarmMachine {
     const commander = this.currentCommander();
 
     commander.initializeSpareTime();
+
+    this.deleteTimer();
     this.state.timer = setInterval(() => {
       commander.thick();
       RendererSender.sendAll(
@@ -49,9 +56,6 @@ class AlarmMachine {
   }
 
   nextStep(): void {
-    if (this.state.timer) {
-      this.stop();
-    }
     if (this.state.id === null) {
       throw new Error("Cannot next step!");
     }
@@ -83,16 +87,23 @@ class AlarmMachine {
     this.state.timer = null;
   }
 
+  deleteTimer(): void {
+    if (this.state.timer) {
+      this.stop();
+    }
+  }
+
   timeOver(commander: AlarmCommander): void {
     commander.initializeSpareTime();
     commander.ring();
-    if (alarmWindow) {
+    if (this.alarmWindow) {
       this.closeAlarmWindow();
     }
     this.alarmWindow = new AlarmWindow(
       this.id,
       convertAlarmCommanderToType(commander)
     );
+    RendererSender.sendAll(ACTION_RING, this.id);
     this.stop();
   }
 

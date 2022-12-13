@@ -1,16 +1,35 @@
-import styled from "@emotion/styled";
+import UpdateAlarmMachineStateDto from "@main/alarms/AlarmMachine/interfaces/update-alarm-machine-state-dto";
+// interfaces
+
 import RendererAlarmMachine from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
+// types
+
+import { ButtonBase } from "@mui/material";
+// React modules
+
+import SvgIcon from "@renderer/common/components/SvgIcon";
 import {
   ViewCurrentAlarmCommanderItem,
   ViewNextAlarmCommanderItem,
 } from "@renderer/setting/components/ViewAlarmCommanderItem";
-import { ButtonBase } from "@mui/material";
+// components
+
+import styled from "@emotion/styled";
+// styles
 
 interface ViewAlarmMachineItemProps {
   alarmMachine: RendererAlarmMachine;
+  onChangeState: (
+    updateAlarmMachineStateDto: UpdateAlarmMachineStateDto
+  ) => void;
+  onDelete: () => void;
 }
 
-const ViewAlarmMachineItem = ({ alarmMachine }: ViewAlarmMachineItemProps) => {
+const ViewAlarmMachineItem = ({
+  alarmMachine,
+  onChangeState,
+  onDelete,
+}: ViewAlarmMachineItemProps) => {
   const currentAlarmCommander = alarmMachine.commanders.find(
     commander => commander.id === alarmMachine.state.id
   );
@@ -20,17 +39,37 @@ const ViewAlarmMachineItem = ({ alarmMachine }: ViewAlarmMachineItemProps) => {
     ) + 1;
   const nextAlarmCommander = alarmMachine.commanders[nextAlarmCommanderIndex];
 
+  const onClick = async () => {
+    const result = await (alarmMachine.state.timer
+      ? window.alarm.stop(alarmMachine.id)
+      : window.alarm.start(alarmMachine.id));
+
+    if (result === alarmMachine.id) {
+      onChangeState({ timer: !alarmMachine.state.timer });
+    }
+  };
+
+  const onClickDelete = async () => {
+    const result = await window.alarm.delete(alarmMachine.id);
+    if (result === alarmMachine.id) {
+      onDelete();
+    }
+  };
+
   return (
     <StyleItem>
-      <StyleTypeText>
-        {alarmMachine.type === "once" ? "한 번 실행" : "무한 반복"}
-      </StyleTypeText>
+      <StyleTopLine>
+        <SvgIcon icon="Delete" onClick={onClickDelete} />
+        <StyleTypeText>
+          {alarmMachine.type === "once" ? "한 번 실행" : "무한 반복"}
+        </StyleTypeText>
+      </StyleTopLine>
       {currentAlarmCommander && (
         <ViewCurrentAlarmCommanderItem alarmCommander={currentAlarmCommander} />
       )}
       <ViewNextAlarmCommanderItem alarmCommander={nextAlarmCommander} />
-      <StyleExecuteButton onClick={() => window.alarm.start(alarmMachine.id)}>
-        실행
+      <StyleExecuteButton onClick={onClick}>
+        {alarmMachine.state.timer ? "정지" : "실행"}
       </StyleExecuteButton>
     </StyleItem>
   );
@@ -38,10 +77,17 @@ const ViewAlarmMachineItem = ({ alarmMachine }: ViewAlarmMachineItemProps) => {
 
 interface ViewAlarmMachineListProps {
   alarmMachines: RendererAlarmMachine[];
+  onChangeState: (
+    id: string,
+    updateAlarmMachineStateDto: UpdateAlarmMachineStateDto
+  ) => void;
+  onDelete: (id: string) => void;
 }
 
 export const ViewAlarmMachineList = ({
   alarmMachines,
+  onChangeState,
+  onDelete,
 }: ViewAlarmMachineListProps) => {
   return (
     <StyleList>
@@ -49,6 +95,8 @@ export const ViewAlarmMachineList = ({
         <ViewAlarmMachineItem
           key={alarmMachine.id}
           alarmMachine={alarmMachine}
+          onChangeState={param => onChangeState(alarmMachine.id, param)}
+          onDelete={() => onDelete(alarmMachine.id)}
         />
       ))}
     </StyleList>
@@ -82,6 +130,14 @@ const StyleItem = styled.li`
 
   margin-top: 10px;
   margin-left: 10px;
+`;
+
+const StyleTopLine = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
 `;
 
 const StyleTypeText = styled.p`

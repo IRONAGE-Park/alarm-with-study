@@ -45,6 +45,5 @@ const globalStyle = css`
     &::-webkit-scrollbar {
       display: none;
     }
-    user-select: none;
   }
 `;

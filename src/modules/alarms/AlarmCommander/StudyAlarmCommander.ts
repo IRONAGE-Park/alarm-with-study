@@ -1,10 +1,11 @@
 import { shell } from "electron";
 // Electron Main-process modules
 
-import AlarmCommander from "@main/alarms/AlarmCommander/AlarmCommander";
 import NotificationBuilder from "@main/builder/NotificationBuilder";
+// builders
 
-// interfaces
+import AlarmCommander from "@main/alarms/AlarmCommander/AlarmCommander";
+// commanders
 
 class StudyAlarmCommander extends AlarmCommander {
   ring(): void {

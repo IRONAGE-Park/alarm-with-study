@@ -1,9 +1,13 @@
+import type AlarmCommander from "@main/alarms/AlarmCommander/AlarmCommander";
+import type { AlarmCommanderType } from "@main/alarms/AlarmCommander/AlarmCommander";
+// types
+
 import uuid from "uuid";
-import AlarmCommander, {
-  AlarmCommanderType,
-} from "@main/alarms/AlarmCommander/AlarmCommander";
+// Node.js modules
+
 import RestAlarmCommander from "@main/alarms/AlarmCommander/RestAlarmCommander";
 import StudyAlarmCommander from "@main/alarms/AlarmCommander/StudyAlarmCommander";
+// commanders
 
 export function createAlarmCommander(
   type: AlarmCommanderType,

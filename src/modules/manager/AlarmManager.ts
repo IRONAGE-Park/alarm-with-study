@@ -1,17 +1,26 @@
+import CreateAlarmMachineDto from "@main/alarms/AlarmMachine/interfaces/create-alarm-machine-dto";
+import RendererAlarmMachine, {
+  convertAlarmMachineStateToRenderer,
+  convertAlarmMachineToRenderer,
+} from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
+// interfaces
+
 import uuid from "uuid";
 // Node.js modules
 
 import { ipcMain } from "electron";
 // Electron Main-process modules
 
-import CreateAlarmMachineDto from "@main/alarms/AlarmMachine/interfaces/create-alarm-machine-dto";
-import RendererAlarmMachine, {
-  convertAlarmMachineToRenderer,
-} from "@main/alarms/AlarmMachine/interfaces/renderer-alarm-machine";
-import { createAlarmCommander } from "@main/alarms/AlarmCommander/utils";
+import RendererSender from "@libs/RendererSender";
+// common libraries
+
 import AlarmMachine, {
   NextAction,
 } from "@main/alarms/AlarmMachine/AlarmMachine";
+// machines
+
+import { createAlarmCommander } from "@main/alarms/AlarmCommander/utils";
+// converter functions
 
 import {
   ACTION_CREATE_ALARM,
@@ -20,7 +29,9 @@ import {
   ACTION_DELETE_ALARM,
   ACTION_GET_ALARMS,
   ACTION_CHECK_RING,
+  ACTION_CHANGED_ALARM_MACHINE_STATE,
 } from "@bridges/alarm";
+// messages
 
 class AlarmManager {
   constructor(private alarms: AlarmMachine[] = []) {}
@@ -49,16 +60,28 @@ class AlarmManager {
   }
 
   deleteAlarmMachine(id: string): void {
-    this.alarms = this.alarms.filter(alarm => alarm.id !== id);
+    this.alarms = this.alarms.filter(alarm => {
+      if (alarm.id === id) {
+        alarm.deleteTimer();
+        return false;
+      }
+      return true;
+    });
   }
 
   nextAction(id: string, nextAction: NextAction): string {
     const alarmMachine = this.findAlarmMachine(id);
     alarmMachine.closeAlarmWindow();
+
+    alarmMachine.nextStep();
     if (nextAction === "start") {
-      alarmMachine.nextStep();
       alarmMachine.start();
     }
+    RendererSender.sendAll(
+      ACTION_CHANGED_ALARM_MACHINE_STATE,
+      id,
+      convertAlarmMachineStateToRenderer(alarmMachine.state)
+    );
     return alarmMachine.currentCommanderId();
   }
 
@@ -80,16 +103,22 @@ class AlarmManager {
       }
     );
 
-    ipcMain.handle(ACTION_START_ALARM, (_, id: string): void => {
+    ipcMain.handle(ACTION_START_ALARM, (_, id: string): string => {
       this.startAlarmMachine(id);
+
+      return id;
     });
 
-    ipcMain.handle(ACTION_STOP_ALARM, (_, id: string): void => {
+    ipcMain.handle(ACTION_STOP_ALARM, (_, id: string): string => {
       this.stopAlarmMachine(id);
+
+      return id;
     });
 
-    ipcMain.handle(ACTION_DELETE_ALARM, (_, id: string): void => {
+    ipcMain.handle(ACTION_DELETE_ALARM, (_, id: string): string => {
       this.deleteAlarmMachine(id);
+
+      return id;
     });
 
     ipcMain.handle(ACTION_GET_ALARMS, (): RendererAlarmMachine[] =>

@@ -1,7 +1,8 @@
-import { Menu, shell } from "electron";
-import SettingWindow from "@windows/SettingWindow";
-
+import { app, Menu, shell } from "electron";
 // Electron Main-process module
+
+import SettingWindow from "@windows/SettingWindow";
+// windows
 
 /**
  * `Main-process`
@@ -29,9 +30,17 @@ class MenuBuilder {
           ),
       },
       { type: "separator" }, // 간격 분할 생성
+      { label: "새로고침", role: "reload" },
       {
         label: "열기",
         click: () => SettingWindow.getInstance().resetWindow(), // `Setting Window`를 염
+      },
+      {
+        label: "재실행",
+        click: () => {
+          app.relaunch({ args: process.argv.slice(1).concat(["--relaunch"]) });
+          app.exit(0);
+        },
       },
       { label: "종료", type: "normal", role: "quit" }, // `App`을 종료함
     ]);

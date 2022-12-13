@@ -1,14 +1,15 @@
 import type RendererAlarmCommander from "@main/alarms/AlarmCommander/interfaces/renderer-alarm-commander";
-import AlarmMachine, {
-  type AlarmMachineType,
-  type AlarmState,
+import type AlarmMachine from "@main/alarms/AlarmMachine/AlarmMachine";
+import type {
+  AlarmMachineType,
+  AlarmState,
 } from "@main/alarms/AlarmMachine/AlarmMachine";
 // interfaces
 
 import { convertAlarmCommanderToRenderer } from "@main/alarms/AlarmCommander/interfaces/renderer-alarm-commander";
 // converter functions
 
-interface RendererAlarmState extends Omit<AlarmState, "timer"> {
+export interface RendererAlarmState extends Omit<AlarmState, "timer"> {
   timer: boolean;
 }
 
@@ -21,6 +22,15 @@ interface RendererAlarmMachine {
 
 export default RendererAlarmMachine;
 
+export function convertAlarmMachineStateToRenderer(
+  alarmState: AlarmState
+): RendererAlarmState {
+  return {
+    id: alarmState.id,
+    timer: !!alarmState.timer,
+  };
+}
+
 export function convertAlarmMachineToRenderer(
   alarmMachine: AlarmMachine
 ): RendererAlarmMachine {
@@ -28,9 +38,6 @@ export function convertAlarmMachineToRenderer(
     id: alarmMachine.id,
     type: alarmMachine.type,
     commanders: alarmMachine.commanders.map(convertAlarmCommanderToRenderer),
-    state: {
-      id: alarmMachine.state.id,
-      timer: !!alarmMachine.state.timer,
-    },
+    state: convertAlarmMachineStateToRenderer(alarmMachine.state),
   };
 }
