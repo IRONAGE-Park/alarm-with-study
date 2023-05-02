@@ -1,7 +1,3 @@
-import { app } from "electron";
-import log from "electron-log";
-// Electron Main-process module
-
 import { usingRegister } from "@main/register/_Register";
 import AutoUpdate from "@main/register/AutoUpdate";
 import SingleInstance from "@main/register/SingleInstance";

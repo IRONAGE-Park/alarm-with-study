@@ -7,8 +7,8 @@ fn main() {
     use tauri::Manager;
   tauri::Builder::default()
       .setup(|app| {
-          let main_window = app.get_window("setting").unwrap();
-          main_window.open_devtools();
+          app.get_window("setting").unwrap().open_devtools();
+          app.get_window("alarm").unwrap().open_devtools();
           Ok(())
       })
     .run(tauri::generate_context!())

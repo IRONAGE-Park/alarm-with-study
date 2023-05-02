@@ -1,10 +1,6 @@
 import path from "path";
 // Node.js module
 
-import { BrowserWindow, shell } from "electron";
-import isDev from "electron-is-dev";
-// Electron Main-process module
-
 import AppIcon from "@assets/icons/app.icns";
 // assets
 

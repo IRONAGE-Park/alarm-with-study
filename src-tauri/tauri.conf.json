@@ -60,7 +60,7 @@
         "width": 1080,
         "height": 720,
         "resizable": true,
-        "url": "setting"
+        "url": "setting/index.html"
       },
       {
         "label": "alarm",
@@ -68,7 +68,7 @@
         "width": 1080,
         "height": 720,
         "resizable": true,
-        "url": "alarm"
+        "url": "alarm/index.html"
       }
     ]
   }
