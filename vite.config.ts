@@ -3,7 +3,6 @@ import path from "path";
 
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import electron from "vite-plugin-electron";
 import eslint from "vite-plugin-eslint";
 import svgr from "vite-plugin-svgr";
 
@@ -16,9 +15,7 @@ const resolveApp = (relativePath: string) =>
 
 const srcPath = "src";
 const rendererPath = `${srcPath}/apps`;
-const preloadPath = `${srcPath}/preloads`;
 const rendererSrc = resolveApp(rendererPath);
-const preloadSrc = resolveApp(preloadPath);
 const buildPath = "build";
 const buildSrc = resolveApp(buildPath);
 
@@ -37,7 +34,22 @@ const assetsInclude = ["**/*.icns", "**/*.ico"];
 export default defineConfig({
   root: rendererSrc,
   assetsInclude,
+  // prevent vite from obscuring rust errors
+  clearScreen: false,
+  // Tauri expects a fixed port, fail if that port is not available
+  server: {
+    strictPort: true,
+  },
+  // to make use of `TAURI_PLATFORM`, `TAURI_ARCH`, `TAURI_FAMILY`,
+  // `TAURI_PLATFORM_VERSION`, `TAURI_PLATFORM_TYPE` and `TAURI_DEBUG`
+  // env variables
   build: {
+    // Tauri uses Chromium on Windows and WebKit on macOS and Linux
+    target: process.env.TAURI_PLATFORM === "windows" ? "chrome105" : "safari13",
+    // don't minify for debug builds
+    minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
+    // produce sourcemaps for debug builds
+    sourcemap: !!process.env.TAURI_DEBUG,
     rollupOptions: {
       input: {
         setting: path.join(rendererSrc, "setting", "index.html"),
@@ -60,39 +72,6 @@ export default defineConfig({
     svgr({
       svgrOptions: {
         ref: true,
-      },
-    }),
-    electron({
-      main: {
-        entry: "./src/main.ts",
-        vite: {
-          plugins: [eslint()],
-          assetsInclude,
-          build: {
-            outDir: buildSrc,
-          },
-          resolve: {
-            alias: resolveAlias,
-          },
-        },
-      },
-      preload: {
-        input: {
-          preload: path.join(preloadSrc, "preload.ts"),
-        },
-        vite: {
-          plugins: [eslint()],
-          build: {
-            outDir: path.join(buildSrc, "preloads"),
-            rollupOptions: {
-              output: {},
-              preserveEntrySignatures: false,
-            },
-          },
-          resolve: {
-            alias: resolveAlias,
-          },
-        },
       },
     }),
   ],
